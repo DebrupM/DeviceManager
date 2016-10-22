@@ -458,32 +458,7 @@
             },{
                 type: 'info',
                 timer: 4000
-            });
-                      
-            employees = ["Debrup_M", "ASD"];
-			//var emp = "debrup_m";
-			//localStorage.setItem('emp', emp);
-			localStorage.setItem('employees', employees);
-			
-			db.list(function(err, body) {
-			  if (!err) {
-			    body.rows.forEach(function(doc) {
-			    	db.get(doc.id, function(err, body) {
-			    		  if (!err) {
-			    			  if (doc.id === 'employeeDetails') {
-			    			  	localStorage.setItem('emp', doc.id);
-					    		body.employees.forEach(function(employee){
-							    	//employees.push(employee.employee_Name);
-							    	localStorage.setItem('employees', employee.employee_Name);
-					    		});
-					    		    //localStorage.setItem('employees', employees.toString());
-					    		    
-			    			  }
-			    		  }
-			    	});
-			    });
-			  }
-			});
+            });                      
     	});
 	</script>
 	
