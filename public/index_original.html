@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+</head>
+<body ng-app="MyAngularApp" ng-controller="StoreController as store">
+	<section>
+		<ul class="nav nav-pills">
+		<li> <a href> Description</a> </li>
+		<li> <a href> Specifications</a> </li>
+		<li> <a href> Reviews</a> </li>
+		</ul>
+	</section>
+
+	<div>
+      <label>Name:</label>
+      <input type="text" ng-model="yourName" placeholder="Enter a name here">
+      <h4>Hello {{yourName}}!</h4>
+      <hr>
+    </div>
+    
+    <div ng-repeat="product in store.products | orderBy:'-price'" ng-hide="store.product.soldOut">
+    	<h3> {{product.name}}
+    		<em class="pull-right">{{product.price | currency}}</em> 
+    	</h3>
+    	<h3> {{product.description}} </h3>
+    	<button ng-show="product.canPurchase"> Add to Cart </button>
+    	<hr>
+    </div>
+    
+	<script src="bower_components/angular/angular.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="/public/app.js" type="text/javascript"></script>
+	<script src="/public/maincontroller.js" type="text/javascript"></script>
+	<script type="text/javascript" src="angular.min.js"></script>
+</body>
+</html>
