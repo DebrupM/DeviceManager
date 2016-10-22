@@ -1,5 +1,3 @@
-var adminUser = "Debrup M";
-
 /*eslint-env node*/
 
 //------------------------------------------------------------------------------
@@ -41,113 +39,84 @@ var password = '82dad6fdb2b63b22a39d78ae93115adaa4550595abacc56d8f04e8e493f44556
 // Initialize the library with my account.
 var cloudant = Cloudant({account:me, password:password});
 
-cloudant.db.list(function(err, allDbs) {
-  console.log('All my databases: %s', allDbs.join(', '))
-});
+//cloudant.db.list(function(err, allDbs) {
+//  console.log('All my databases: %s', allDbs.join(', '));
+//});
+
 
 var db = require(__dirname + '/node_modules/nano')('https://d7870b19-ca12-469b-8fb4-264d2dc3dbba-bluemix:82dad6fdb2b63b22a39d78ae93115adaa4550595abacc56d8f04e8e493f44556@d7870b19-ca12-469b-8fb4-264d2dc3dbba-bluemix.cloudant.com/employee');
 
-//db.list(function(err, body) {
-//	  if (!err) {
-//	    body.rows.forEach(function(doc) {
-//	    	db.get(doc.id, function(err, body) {
-//	    		  if (!err)
-//	    		    console.log(body);
-//	    		});
-//	      console.log(doc);
-//	    });
-//	  }
-//	});
-
 var arrEmployees = [];
+var arrUsers = [];
 
 db.list(function(err, body) {
-	  if (!err) {
-		  console.log(body);
-	    body.rows.forEach(function(doc) {
-	    	db.get(doc.id, function(err, body) {
-	    		  if (!err) {
-//	    			  console.log(body);
-	    			  if (doc.id === 'employeeDetails') {
-	    				  console.log('body');
-			    		    console.log(body);
-			    		    body.employees.forEach(function(employee){
-//			    		    	db.get(employee, function(err, emp){
-//			    		    		if (!err) {
-			    		    			console.log('emp');
-					    		    	console.log(employee.employee_Name);
-					    		    	arrEmployees.push(employee.employee_Name);
-//			    		    		}
-//			    		    	});
-			    		    });
-			    		    console.log('All my emplyees: %s', arrEmployees[0]);
-//			    		    document.getElementById("mytag").innerHTML = "Hello Dolly";
-	    			  }
-	    		  }
-	    		});
-	    });
-	  }
-	});
+  if (!err) {
+    console.log(body);
+    body.rows.forEach(function(doc) {
+      db.get(doc.id, function(err, body) {
+        if (!err) {
+          console.log(body);
+          if (doc.id === 'employeeDetails') {
+            console.log('body');
+            console.log(body);
+            body.employees.forEach(function(employee){
+              console.log('employee : %s', employee.employee_Name);
+              arrUsers.push({
+                  userID: employee.employee_ID,
+                  userName: employee.employee_Name,
+                  userEmail: employee.employee_NotesID,
+                  userPwd: employee.employee_Password
+              });
+              arrEmployees.push(employee.employee_Name);
+            });
+            console.log('Admin employee: %s', arrEmployees[0]);
+            console.log('All my employees: %s', arrEmployees.join(', '));
+          }
+        }
+      });
+    });
+  }
+});
 
-function injectDeviceDetails() {
-	alert(db);
-	db.list(function(err, body) {
-		alert("hello");
-		  if (!err) {
-			  console.log(body);
-		    body.rows.forEach(function(doc) {
-		    	db.get(doc.id, function(err, body) {
-		    		  if (!err) {
-//		    			  console.log(body);
-		    			  if (doc.id === 'employeeDetails') {
-		    				  console.log('body');
-				    		    console.log(body);
-				    		    body.employees.forEach(function(employee){
-//				    		    	db.get(employee, function(err, emp){
-//				    		    		if (!err) {
-				    		    			console.log('emp');
-						    		    	console.log(employee.employee_Name);
-						    		    	arrEmployees.push(employee.employee_Name);
-//				    		    		}
-//				    		    	});
-				    		    });
-				    		    console.log('All my emplyees: %s', arrEmployees[0]);
-				    		    alert(document.getElementById("mytag"));
-				    		    document.getElementById("mytag").innerHTML = "Hello Dolly";
-		    			  }
-		    		  }
-		    		});
-		    });
-		  }
-		});
-}
 
-//function showAlertForEdit() {
+function showAlertForEdit() {
 //	injectDeviceDetails();
 //	alert(arrEmployees[0]);
 //	demo.initChartist();
-//	//var user = localStorage.getItem('employees');
-//	var data = "Logged in user : " + arrEmployees[0];
-//	$.notify({
-//    	icon: 'pe-7s-gift',
-//    	message: data//"Feature coming soon"
-//    },{
-//        type: 'danger',
-//        timer: 4000
-//    });
-//};   
+	//var user = localStorage.getItem('employees');
+	var data = "Logged in user : " + arrEmployees[0];
+	$.notify({
+    	icon: 'pe-7s-gift',
+    	message: data//"Feature coming soon"
+    },{
+        type: 'danger',
+        timer: 4000
+    });
+};    	
 
 
-(function(exports){
+//(function(exports){
+//
+//    // your code goes here
+//
+//   exports.test = function(){
+//        return 'hello world'
+//    };
+//
+//})(typeof exports === 'undefined'? this['mymodule']={}: exports);
+//
+//console.log(this.test());
 
-    // your code goes here
-
-   exports.test = function(){
-        return 'hello world'
-    };
-
-})(typeof exports === 'undefined'? this['mymodule']={}: exports);
-
-app.get('/test', function(req, res, next) {
-  res.json({ message: 'Hello World' });
+app.get('/data', function(req, res){
+  res.send(arrEmployees[0]);
 });
+
+app.get('/currentUser', function(req, res) {
+  res.send(arrUsers[2]);
+});
+
+app.get('/employees', function(req, res) {
+  res.send(arrEmployees);
+});
+
+//app.listen(3000);
